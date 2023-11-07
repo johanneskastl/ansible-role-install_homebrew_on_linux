@@ -42,3 +42,11 @@
     - path: '/home/linuxbrew/.linuxbrew/Cellar/'
     - path: '/home/linuxbrew/.linuxbrew/Caskroom/'
     - path: '/home/linuxbrew/.linuxbrew/Frameworks/'
+
+- name: 'Clone Homebrew repository'
+  ansible.builtin.git:
+    repo: 'https://github.com/Homebrew/brew'
+    dest: '/home/linuxbrew/.linuxbrew/Homebrew'
+    version: '4.1.19'
+    clone: true
+    update: true
