@@ -51,3 +51,24 @@
     clone: true
     update: true
   become: false
+
+
+- name: 'Create links in /home/linuxbrew/.linuxbrew/'
+  ansible.builtin.file:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: 'link'
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  become: false
+  loop:
+    - src: ../Homebrew/bin/brew
+      dest: /home/linuxbrew/.linuxbrew/bin/brew
+    - src: ../../Homebrew/docs
+      dest: /home/linuxbrew/.linuxbrew/share/doc/homebrew
+    - src: ../../../Homebrew/manpages/brew.1
+      dest: /home/linuxbrew/.linuxbrew/share/man/man1/brew.1
+    - src: ../../../Homebrew/completions/zsh/_brew
+      dest: /home/linuxbrew/.linuxbrew/share/zsh/site-functions/_brew
+    - src: ../../Homebrew/completions/bash/brew
+      dest: /home/linuxbrew/.linuxbrew/etc/bash_completion.d/brew
