@@ -1,0 +1,44 @@
+---
+# install_homebrew_on_linux/tasks/main.yml
+
+- name: 'Safety check'
+  ansible.builtin.fail:
+    msg: 'This role does not work, if you are using the root user to connect to your machine...'
+  when:
+    - 'ansible_user == "root"'
+
+- name: 'Create directories in /home/linuxbrew/'
+  ansible.builtin.file:
+    path: '/home/linuxbrew/'
+    state: 'directory'
+    owner: 'root'
+    group: 'root'
+    mode: '0755'
+
+- name: 'Create directories in /home/linuxbrew/'
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: 'directory'
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "{{ item.permissions | default('0775') }}"
+  loop:
+    - path: '/home/linuxbrew/.linuxbrew/'
+      permissions: '0755'
+    - path: '/home/linuxbrew/.linuxbrew/bin/'
+    - path: '/home/linuxbrew/.linuxbrew/etc/'
+    - path: '/home/linuxbrew/.linuxbrew/include/'
+    - path: '/home/linuxbrew/.linuxbrew/lib/'
+    - path: '/home/linuxbrew/.linuxbrew/sbin/'
+    - path: '/home/linuxbrew/.linuxbrew/share/'
+    - path: '/home/linuxbrew/.linuxbrew/var/'
+    - path: '/home/linuxbrew/.linuxbrew/opt/'
+    - path: '/home/linuxbrew/.linuxbrew/share/zsh/'
+      permissions: '0755'
+    - path: '/home/linuxbrew/.linuxbrew/share/zsh/site-functions/'
+      permissions: '0755'
+    - path: '/home/linuxbrew/.linuxbrew/var/homebrew/'
+    - path: '/home/linuxbrew/.linuxbrew/var/homebrew/linked/'
+    - path: '/home/linuxbrew/.linuxbrew/Cellar/'
+    - path: '/home/linuxbrew/.linuxbrew/Caskroom/'
+    - path: '/home/linuxbrew/.linuxbrew/Frameworks/'
