@@ -79,3 +79,21 @@
       dest: /home/linuxbrew/.linuxbrew/share/zsh/site-functions/_brew
     - src: ../../Homebrew/completions/bash/brew
       dest: /home/linuxbrew/.linuxbrew/etc/bash_completion.d/brew
+
+- name: 'Prepare snippet for .bashrc'
+  ansible.builtin.shell:
+    cmd: '/home/linuxbrew/.linuxbrew/bin/brew shellenv'
+  register: shellenv
+  become: false
+  changed_when: false
+  check_mode: false
+  when:
+    - modify_bashrc_for_homebrew | bool
+
+- name: 'Insert snippet into .bashrc'
+  ansible.builtin.blockinfile:
+    path: ".bashrc"
+    block: "{{ shellenv.stdout }}"
+  become: false
+  when:
+    - modify_bashrc_for_homebrew | bool
