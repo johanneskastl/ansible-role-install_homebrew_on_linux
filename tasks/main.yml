@@ -80,20 +80,16 @@
     - src: ../../Homebrew/completions/bash/brew
       dest: /home/linuxbrew/.linuxbrew/etc/bash_completion.d/brew
 
-- name: 'Prepare snippet for .bashrc'
-  ansible.builtin.shell:
-    cmd: '/home/linuxbrew/.linuxbrew/bin/brew shellenv'
-  register: shellenv
-  become: false
-  changed_when: false
-  check_mode: false
-  when:
-    - modify_bashrc_for_homebrew | bool
-
 - name: 'Insert snippet into .bashrc'
   ansible.builtin.blockinfile:
     path: ".bashrc"
-    block: "{{ shellenv.stdout }}"
+    block: |
+      export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
+      export HOMEBREW_CELLAR="/home/linuxbrew/.linuxbrew/Cellar"
+      export HOMEBREW_REPOSITORY="/home/linuxbrew/.linuxbrew/Homebrew"
+      export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin${PATH+:$PATH}"
+      export MANPATH="/home/linuxbrew/.linuxbrew/share/man${MANPATH+:$MANPATH}:"
+      export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:${INFOPATH:-}"
   become: false
   when:
     - modify_bashrc_for_homebrew | bool
