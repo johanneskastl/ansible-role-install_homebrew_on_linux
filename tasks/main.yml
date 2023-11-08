@@ -60,7 +60,6 @@
     update: true
   become: false
 
-
 - name: 'Create links in /home/linuxbrew/.linuxbrew/'
   ansible.builtin.file:
     src: "{{ item.src }}"
